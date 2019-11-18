@@ -213,7 +213,7 @@ def getCpuInfo():
 def getCpuId(cpuInfo=None):
   """Returns cpu model for localhost"""
   cpuInfo = cpuInfo if cpuInfo else getCpuInfo()
-  model = (cpuInfo['extended_model'] << 4 | cpuInfo['model'])
+  model = (cpuInfo.get('extended_model', 4) << 4 | cpuInfo['model'])
   return '{}-{}-{:02X}'.format(cpuInfo['vendor_id'], cpuInfo['family'], model)
 
 def meminfo(remoteConnection=None):

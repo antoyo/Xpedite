@@ -146,5 +146,5 @@ if(GTEST_FOUND)
          COMMAND testXpedite)
 endif()
 
-message("Starting Xpedite Java Setup")
-add_subdirectory(jni)
+#message("Starting Xpedite Java Setup")
+#add_subdirectory(jni)

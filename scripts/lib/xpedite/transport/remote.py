@@ -23,7 +23,7 @@ def deliver(remote, obj):
     hostname = remote.modules.socket.gethostname()
     errmsg = 'xpedite suite {} is not installed in the remote host {}.'.format(xpeditePath, hostname)
     LOGGER.error(errmsg)
-    raise Exception(errmsg)
+    #raise Exception(errmsg)
   return rpyc.utils.classic.deliver(remote, obj)
 
 def matchRegexpsInFile(logpath, logExtracts):
@@ -100,7 +100,7 @@ class Remote(object):
     :rtype: Remote
     """
     from xpedite.dependencies import binPath
-    python = binPath('python')
+    python = binPath('python2')
     rpyproc = os.path.join(os.path.dirname(__file__), 'rpyc')
 
     if self.host == 'localhost':
@@ -109,7 +109,8 @@ class Remote(object):
       pluginPath = os.environ.get('XPEDITE_PLUGIN_PATH', '')
       env = 'export XPEDITE_PLUGIN_PATH={};'.format(pluginPath) if pluginPath else ''
       ssh = binPath('ssh')
-      self.proc = subprocess.Popen([ssh, '-T', '-o', 'StrictHostKeyChecking=no', self.host, env, python, rpyproc],
+      rpyproc = '/Xpedite/scripts/lib/xpedite/transport/rpyc'
+      self.proc = subprocess.Popen([ssh, '-T', '-o', 'StrictHostKeyChecking=no', '-l', 'root', self.host, env, python, rpyproc],
                                    stderr=self.std.err,
                                    stdout=self.std.out)
 
@@ -153,7 +154,7 @@ class Remote(object):
     if self.host != 'localhost':
       from xpedite.dependencies import binPath
       ssh = binPath('ssh')
-      subprocess.Popen([ssh, '-T', '-o', 'StrictHostKeyChecking=no', self.host, 'kill', str(self.pid)]).wait()
+      subprocess.Popen([ssh, '-T', '-o', 'StrictHostKeyChecking=no', '-l', 'root', self.host, 'kill', str(self.pid)]).wait()
     self.std.close()
 
   def __exit__(self, objType, value, traceback):
